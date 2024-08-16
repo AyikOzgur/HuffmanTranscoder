@@ -1,0 +1,3 @@
+/home/pi/Projects/HuffmanTranscoder/build/CMakeFiles/HuffmanTranscoder.dir
+/home/pi/Projects/HuffmanTranscoder/build/CMakeFiles/edit_cache.dir
+/home/pi/Projects/HuffmanTranscoder/build/CMakeFiles/rebuild_cache.dir

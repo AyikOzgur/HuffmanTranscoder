@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/HuffmanTranscoder.dir/Huffman/Huffman.c.o CMakeFiles/HuffmanTranscoder.dir/main.c.o -o HuffmanTranscoder 
