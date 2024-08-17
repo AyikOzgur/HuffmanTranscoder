@@ -13,7 +13,8 @@ int main()
 
     // Remove newline character if present
     size_t len = strlen(input);
-    if (len > 0 && input[len - 1] == '\n') {
+    if (len > 0 && input[len - 1] == '\n') 
+	{
         input[len - 1] = '\0';
     }
 
@@ -26,9 +27,12 @@ int main()
     char *decodedText = Huffman_decode(huffman, encodedText, strlen(encodedText));
 
     // Verify correctness by comparing the original text with the decoded text
-    if (strcmp(input, decodedText) == 0) {
+    if (strcmp(input, decodedText) == 0) 
+	{
         printf("Decoding successful! The original text matches the decoded text.\n");
-    } else {
+    } 
+	else 
+	{
         printf("Decoding failed! The original text does not match the decoded text.\n");
     }
 
