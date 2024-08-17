@@ -1,0 +1,6 @@
+{
+    "cmake.sourceDirectory": "/home/pi/Projects/HuffmanTranscoder/src",
+    "files.associations": {
+        "huffman.h": "c"
+    }
+}
