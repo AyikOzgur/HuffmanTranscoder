@@ -18,14 +18,14 @@ int main()
         input[len - 1] = '\0';
     }
 
-    Huffman *huffmanEncoder = Huffman_create(0);  // Create a Huffman object
+    Huffman *huffmanEncoder = Huffman_create();  // Create a Huffman object
     // Encode the input text
     char *encodedText = (char *)Huffman_encode(huffmanEncoder, input, strlen(input));
 
     HuffmanTree *tree = Huffman_getTree(huffmanEncoder);
 
 
-    Huffman *huffmanDecoder = Huffman_create(0);  // Create a Huffman object
+    Huffman *huffmanDecoder = Huffman_create();  // Create a Huffman object
     Huffman_setTree(huffmanDecoder, tree);
 
     // Decode the encoded text

@@ -1,12 +1,10 @@
 #pragma once
-#include "HuffmanInternals.h"
-
-
 
 typedef struct Huffman Huffman;
 typedef struct HuffmanTree HuffmanTree;
+typedef struct Node Node;
 
-Huffman* Huffman_create(HuffmanType type);
+Huffman* Huffman_create(void);
 
 void Huffman_destroy(Huffman *self);
 

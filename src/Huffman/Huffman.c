@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "HuffmanInternals.h"
 
 #define MAX_CHAR 256 // Assume that it is ASCII
 
@@ -20,7 +19,6 @@ typedef struct
 
 typedef struct
 {
-	HuffmanType type;
 	HuffmanTree *tree;
 }Huffman;
 
@@ -237,31 +235,30 @@ void readEncodedTextFromFile(char* encodedText, FILE* file)
 }
 
 //////////////////// Public methods //////////////////////////////////
-Huffman* Huffman_create(HuffmanType type)
+Huffman* Huffman_create(void)
 {
 	Huffman *huffman = (Huffman*)malloc(sizeof(Huffman));
-	huffman->type = type;
 	return huffman;
 }
 
 void Huffman_destroy(Huffman *self)
 {
-    if (self->tree->node != nullptr)
+    if (self->tree->node != NULL)
     {
 	    free(self->tree->node);
-        self->tree->node = nullptr; 
+        self->tree->node = NULL; 
     }
 
-    if (self->tree->node != nullptr)
+    if (self->tree->node != NULL)
     {
 	    free(self->tree);
-        self->tree = nullptr;
+        self->tree = NULL;
     }
 
-    if (self != nullptr)
+    if (self != NULL)
     {
 	    free(self);
-        self = nullptr;
+        self = NULL;
     }
 }
 
