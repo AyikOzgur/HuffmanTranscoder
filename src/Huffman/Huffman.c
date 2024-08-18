@@ -61,22 +61,17 @@ void scanText(char *text, Node *nodes[], int *size)
     }
 }
 
-// Later use qsort from stdlib.
-void sortNodes(Node *nodes[], int size)
+// Comparison function for qsort
+int compareNodes(const void *a, const void *b) 
 {
-    for (int i = 0; i < size - 1; i++)
-    {
-        for (int j = 0; j < size - i - 1; j++)
-        {
-            if (nodes[j]->freq > nodes[j + 1]->freq)
-            {
-                // Swap the nodes
-                Node *temp = nodes[j];
-                nodes[j] = nodes[j + 1];
-                nodes[j + 1] = temp;
-            }
-        }
-    }
+    Node *nodeA = *(Node **)a;
+    Node *nodeB = *(Node **)b;
+    return (nodeA->freq - nodeB->freq);
+}
+
+void sortNodes(Node *nodes[], int size) 
+{
+    qsort(nodes, size, sizeof(Node *), compareNodes);
 }
 
 Node *buildHuffmanTree(Node *nodes[], int size)
