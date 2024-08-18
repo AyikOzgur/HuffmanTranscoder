@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "Huffman/Huffman.h"  // Include the Huffman internals here
+#include "Huffman/Huffman.h"
 
 #define MAX_CHAR 256
 
@@ -13,31 +13,30 @@ int main()
 
     // Remove newline character if present
     size_t len = strlen(input);
-    if (len > 0 && input[len - 1] == '\n') 
-	{
+    if (len > 0 && input[len - 1] == '\n')
+    {
         input[len - 1] = '\0';
     }
 
-    Huffman *huffmanEncoder = Huffman_create();  // Create a Huffman object
+    Huffman *huffmanEncoder = Huffman_create(); // Create a Huffman object
     // Encode the input text
     char *encodedText = (char *)Huffman_encode(huffmanEncoder, input, strlen(input));
 
     HuffmanTree *tree = Huffman_getTree(huffmanEncoder);
 
-
-    Huffman *huffmanDecoder = Huffman_create();  // Create a Huffman object
+    Huffman *huffmanDecoder = Huffman_create(); // Create a Huffman object
     Huffman_setTree(huffmanDecoder, tree);
 
     // Decode the encoded text
     char *decodedText = Huffman_decode(huffmanDecoder, encodedText, strlen(encodedText));
 
     // Verify correctness by comparing the original text with the decoded text
-    if (strcmp(input, decodedText) == 0) 
-	{
+    if (strcmp(input, decodedText) == 0)
+    {
         printf("Decoding successful! The original text matches the decoded text.\n");
-    } 
-	else 
-	{
+    }
+    else
+    {
         printf("Decoding failed! The original text does not match the decoded text.\n");
     }
 
@@ -45,7 +44,7 @@ int main()
     size_t treeSize = Huffman_getTreeSize(huffmanDecoder);
 
     // Calculate and print the compression rate
-    size_t originalSize = strlen(input) * 8;  // Original size in bits
+    size_t originalSize = strlen(input) * 8;   // Original size in bits
     size_t encodedSize = strlen(encodedText);  // Encoded size in bits
     size_t totalSize = encodedSize + treeSize; // Total size including tree
 

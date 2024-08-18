@@ -4,74 +4,74 @@
 
 #define MAX_CHAR 256 // Assume that it is ASCII
 
-typedef struct 
+typedef struct
 {
-	char data;
-	unsigned freq;
+    char data;
+    unsigned freq;
     struct Node *left, *right;
-}Node;
+} Node;
 
 typedef struct
 {
-	Node *node;
-	size_t size;
-}HuffmanTree;
+    Node *node;
+    size_t size;
+} HuffmanTree;
 
 typedef struct
 {
-	HuffmanTree *tree;
-}Huffman;
+    HuffmanTree *tree;
+} Huffman;
 
 // Function to calculate the size of the Huffman tree in bits
 size_t calculateTreeSize(Node *root)
 {
-    if (!root) 
-		return 1;  // 1 bit to represent a NULL child ('#')
+    if (!root)
+        return 1; // 1 bit to represent a NULL child ('#')
 
     return 1 + calculateTreeSize(root->left) + calculateTreeSize(root->right);
 }
 
-Node* createNode(char data, unsigned freq)
+Node *createNode(char data, unsigned freq)
 {
-	Node* newNode = (Node*)malloc(sizeof(Node));
-	newNode->data = data;
-	newNode->freq = freq;
-	newNode->left = newNode->right = NULL;
-	return newNode;
+    Node *newNode = (Node *)malloc(sizeof(Node));
+    newNode->data = data;
+    newNode->freq = freq;
+    newNode->left = newNode->right = NULL;
+    return newNode;
 }
 
 void scanText(char *text, Node *nodes[], int *size)
 {
-	unsigned freq[MAX_CHAR] = {0};
+    unsigned freq[MAX_CHAR] = {0};
 
-	// Count the frequency of each character in the text
-	for (int i = 0; text[i] != '\0'; i++)
-	{
-		freq[(unsigned char)text[i]]++;
-	}
+    // Count the frequency of each character in the text
+    for (int i = 0; text[i] != '\0'; i++)
+    {
+        freq[(unsigned char)text[i]]++;
+    }
 
-	// Create nodes for each character that appears in the text.
-	*size  = 0;
-	for (int i = 0; i < MAX_CHAR; i++)
-	{
-		if (freq[i] > 0)
-		{
-			nodes[(*size)++] = createNode((char)i, freq[i]);
-		}
-	}
+    // Create nodes for each character that appears in the text.
+    *size = 0;
+    for (int i = 0; i < MAX_CHAR; i++)
+    {
+        if (freq[i] > 0)
+        {
+            nodes[(*size)++] = createNode((char)i, freq[i]);
+        }
+    }
 }
 
 // Later use qsort from stdlib.
-void sortNodes(Node* nodes[], int size) 
+void sortNodes(Node *nodes[], int size)
 {
-    for (int i = 0; i < size - 1; i++) 
-	{
-        for (int j = 0; j < size - i - 1; j++) 
-		{
-            if (nodes[j]->freq > nodes[j + 1]->freq) 
-			{
+    for (int i = 0; i < size - 1; i++)
+    {
+        for (int j = 0; j < size - i - 1; j++)
+        {
+            if (nodes[j]->freq > nodes[j + 1]->freq)
+            {
                 // Swap the nodes
-                Node* temp = nodes[j];
+                Node *temp = nodes[j];
                 nodes[j] = nodes[j + 1];
                 nodes[j + 1] = temp;
             }
@@ -79,22 +79,22 @@ void sortNodes(Node* nodes[], int size)
     }
 }
 
-Node* buildHuffmanTree(Node* nodes[], int size) 
+Node *buildHuffmanTree(Node *nodes[], int size)
 {
-    while (size > 1) 
-	{
+    while (size > 1)
+    {
         // Take the two nodes with the smallest frequency
-        Node* left = nodes[0];
-        Node* right = nodes[1];
+        Node *left = nodes[0];
+        Node *right = nodes[1];
 
         // Create a new internal node with these two nodes as children
-        Node* newNode = createNode('$', left->freq + right->freq);
+        Node *newNode = createNode('$', left->freq + right->freq);
         newNode->left = left;
         newNode->right = right;
 
         // Remove the two nodes from the array and insert the new node
-        for (int i = 2; i < size; i++) 
-		{
+        for (int i = 2; i < size; i++)
+        {
             nodes[i - 2] = nodes[i];
         }
         nodes[size - 2] = newNode;
@@ -108,103 +108,103 @@ Node* buildHuffmanTree(Node* nodes[], int size)
     return nodes[0];
 }
 
-void generateCodes(Node* root, int arr[], int top, char* codes[MAX_CHAR]) 
+void generateCodes(Node *root, int arr[], int top, char *codes[MAX_CHAR])
 {
-    if (root->left) 
-	{
+    if (root->left)
+    {
         arr[top] = 0;
         generateCodes(root->left, arr, top + 1, codes);
     }
 
-    if (root->right) 
-	{
+    if (root->right)
+    {
         arr[top] = 1;
         generateCodes(root->right, arr, top + 1, codes);
     }
 
-    if (!root->left && !root->right) 
-	{
-        char* code = (char*)malloc(top + 1);
-        for (int i = 0; i < top; i++) 
-		{
-            code[i] = arr[i] + '0';  // Convert to character '0' or '1'
+    if (!root->left && !root->right)
+    {
+        char *code = (char *)malloc(top + 1);
+        for (int i = 0; i < top; i++)
+        {
+            code[i] = arr[i] + '0'; // Convert to character '0' or '1'
         }
         code[top] = '\0';
         codes[(unsigned char)root->data] = code;
     }
 }
 
-void encodeText(char* text, char* codes[MAX_CHAR], char* encodedText) 
+void encodeText(char *text, char *codes[MAX_CHAR], char *encodedText)
 {
     encodedText[0] = '\0';
-    for (int i = 0; text[i] != '\0'; i++) 
-	{
+    for (int i = 0; text[i] != '\0'; i++)
+    {
         strcat(encodedText, codes[(unsigned char)text[i]]);
     }
 }
 
-void writeTreeToFile(Node* root, FILE* file) 
+void writeTreeToFile(Node *root, FILE *file)
 {
-    if (!root) 
-	{
-        fprintf(file, "%c", '#');  // # indicates a NULL child
+    if (!root)
+    {
+        fprintf(file, "%c", '#'); // # indicates a NULL child
         return;
     }
-	
+
     fprintf(file, "%c", root->data);
     writeTreeToFile(root->left, file);
     writeTreeToFile(root->right, file);
 }
 
-Node* readTreeFromFile(FILE* file) 
+Node *readTreeFromFile(FILE *file)
 {
     char ch = fgetc(file);
-    if (ch == '#') 
-		return NULL;  // # indicates a NULL child
+    if (ch == '#')
+        return NULL; // # indicates a NULL child
 
-    Node* root = createNode(ch, 0);
+    Node *root = createNode(ch, 0);
     root->left = readTreeFromFile(file);
     root->right = readTreeFromFile(file);
     return root;
 }
 
-void decodeText(Node* root, char* encodedText, char* decodedText) 
+void decodeText(Node *root, char *encodedText, char *decodedText)
 {
-    Node* current = root;
+    Node *current = root;
     int j = 0;
-    for (int i = 0; encodedText[i] != '\0'; i++) 
-	{
-        if (encodedText[i] == '0') 
-		{
+    for (int i = 0; encodedText[i] != '\0'; i++)
+    {
+        if (encodedText[i] == '0')
+        {
             current = current->left;
-        } 
-		else 
-		{
+        }
+        else
+        {
             current = current->right;
         }
 
         // If it's a leaf node, we've found a character
-        if (!current->left && !current->right) 
-		{
+        if (!current->left && !current->right)
+        {
             decodedText[j++] = current->data;
-            current = root;  // Go back to the root for the next character
+            current = root; // Go back to the root for the next character
         }
     }
-    decodedText[j] = '\0';  // Null-terminate the decoded string
+    decodedText[j] = '\0'; // Null-terminate the decoded string
 }
 
-void writeEncodedTextToFile(char* encodedText, FILE* file) 
+void writeEncodedTextToFile(char *encodedText, FILE *file)
 {
     unsigned char byte = 0;
     int bitCount = 0;
 
-    for (int i = 0; encodedText[i] != '\0'; i++) 
-	{
+    for (int i = 0; encodedText[i] != '\0'; i++)
+    {
         byte = (byte << 1) | (encodedText[i] - '0');
         bitCount++;
 
-        if (bitCount == 8) 
-		{
+        if (bitCount == 8)
+        {
             fwrite(&byte, sizeof(unsigned char), 1, file);
             bitCount = 0;
             byte = 0;
@@ -212,58 +212,57 @@ void writeEncodedTextToFile(char* encodedText, FILE* file)
     }
 
     // Write any remaining bits
-    if (bitCount > 0) 
-	{
-        byte <<= (8 - bitCount);  // Pad the remaining bits with 0s
+    if (bitCount > 0)
+    {
+        byte <<= (8 - bitCount); // Pad the remaining bits with 0s
         fwrite(&byte, sizeof(unsigned char), 1, file);
     }
 }
 
-void readEncodedTextFromFile(char* encodedText, FILE* file) 
+void readEncodedTextFromFile(char *encodedText, FILE *file)
 {
     unsigned char byte;
     int bitCount = 0;
 
-    while (fread(&byte, sizeof(unsigned char), 1, file)) 
-	{
-        for (int i = 7; i >= 0; i--) 
-		{
+    while (fread(&byte, sizeof(unsigned char), 1, file))
+    {
+        for (int i = 7; i >= 0; i--)
+        {
             encodedText[bitCount++] = ((byte >> i) & 1) ? '1' : '0';
         }
     }
-    encodedText[bitCount] = '\0';  // Null-terminate the string
+    encodedText[bitCount] = '\0'; // Null-terminate the string
 }
 
 //////////////////// Public methods //////////////////////////////////
-Huffman* Huffman_create(void)
+Huffman *Huffman_create(void)
 {
-	Huffman *huffman = (Huffman*)malloc(sizeof(Huffman));
-	return huffman;
+    Huffman *huffman = (Huffman *)malloc(sizeof(Huffman));
+    return huffman;
 }
 
 void Huffman_destroy(Huffman *self)
 {
     if (self->tree->node != NULL)
     {
-	    free(self->tree->node);
-        self->tree->node = NULL; 
+        free(self->tree->node);
+        self->tree->node = NULL;
     }
 
     if (self->tree->node != NULL)
     {
-	    free(self->tree);
+        free(self->tree);
         self->tree = NULL;
     }
 
     if (self != NULL)
     {
-	    free(self);
+        free(self);
         self = NULL;
     }
 }
 
-
-void * Huffman_encode(Huffman *self, char *input, size_t size)
+void *Huffman_encode(Huffman *self, char *input, size_t size)
 {
     Node *nodes[MAX_CHAR];
     int numNodes;
@@ -297,7 +296,7 @@ void * Huffman_encode(Huffman *self, char *input, size_t size)
     return encodedText;
 }
 
-HuffmanTree* Huffman_getTree(Huffman *self)
+HuffmanTree *Huffman_getTree(Huffman *self)
 {
     // Return the tree stored in the Huffman structure
     // Assuming the tree is stored within the structure, otherwise manage how you store the tree in the Huffman object.
@@ -306,10 +305,10 @@ HuffmanTree* Huffman_getTree(Huffman *self)
 
 size_t Huffman_getTreeSize(Huffman *self)
 {
-	return self->tree->size;
+    return self->tree->size;
 }
 
-char* Huffman_decode(Huffman *self, void *input, size_t size)
+char *Huffman_decode(Huffman *self, void *input, size_t size)
 {
     // Assuming the Huffman tree is stored in the self->tree
     HuffmanTree *tree = Huffman_getTree(self);
@@ -326,5 +325,5 @@ void Huffman_setTree(Huffman *self, HuffmanTree *tree)
 {
     // Assuming self->tree is where you want to store the tree
     self->tree = tree;
-	self->tree->size = calculateTreeSize(self->tree->node);
+    self->tree->size = calculateTreeSize(self->tree->node);
 }
