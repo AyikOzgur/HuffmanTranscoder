@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.11)
 
-project(HuffmanTranscoder)
+project(HuffmanTranscoder C)
+set(CMAKE_C_STANDARD 23)
+set(CMAKE_C_STANDARD_REQUIRED True)
 
 file(GLOB_RECURSE H_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.h)
 file(GLOB_RECURSE C_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.c)
@@ -8,4 +10,3 @@ file(GLOB_RECURSE C_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.c)
 set(SOURCES ${H_FILES} ${C_FILES})
 
 add_executable(${PROJECT_NAME} ${SOURCES})
-

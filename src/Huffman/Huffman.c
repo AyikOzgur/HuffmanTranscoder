@@ -9,7 +9,7 @@ typedef struct
 {
 	char data;
 	unsigned freq;
-	struct Node *left, *right;
+    struct Node *left, *right;
 }Node;
 
 typedef struct
@@ -33,7 +33,6 @@ size_t calculateTreeSize(Node *root)
     return 1 + calculateTreeSize(root->left) + calculateTreeSize(root->right);
 }
 
-
 Node* createNode(char data, unsigned freq)
 {
 	Node* newNode = (Node*)malloc(sizeof(Node));
@@ -41,13 +40,6 @@ Node* createNode(char data, unsigned freq)
 	newNode->freq = freq;
 	newNode->left = newNode->right = NULL;
 	return newNode;
-}
-
-void Huffman_destroy(Huffman *self)
-{
-	free(self->tree->node);
-	free(self->tree);
-	free(self);
 }
 
 void scanText(char *text, Node *nodes[], int *size)
@@ -252,6 +244,28 @@ Huffman* Huffman_create(HuffmanType type)
 	return huffman;
 }
 
+void Huffman_destroy(Huffman *self)
+{
+    if (self->tree->node != nullptr)
+    {
+	    free(self->tree->node);
+        self->tree->node = nullptr; 
+    }
+
+    if (self->tree->node != nullptr)
+    {
+	    free(self->tree);
+        self->tree = nullptr;
+    }
+
+    if (self != nullptr)
+    {
+	    free(self);
+        self = nullptr;
+    }
+}
+
+
 void * Huffman_encode(Huffman *self, char *input, size_t size)
 {
     Node *nodes[MAX_CHAR];
@@ -297,7 +311,6 @@ size_t Huffman_getTreeSize(Huffman *self)
 {
 	return self->tree->size;
 }
-
 
 char* Huffman_decode(Huffman *self, void *input, size_t size)
 {

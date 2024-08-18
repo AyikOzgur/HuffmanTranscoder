@@ -18,13 +18,18 @@ int main()
         input[len - 1] = '\0';
     }
 
-    Huffman *huffman = Huffman_create(0);  // Create a Huffman object
-
+    Huffman *huffmanEncoder = Huffman_create(0);  // Create a Huffman object
     // Encode the input text
-    char *encodedText = (char *)Huffman_encode(huffman, input, strlen(input));
-    
+    char *encodedText = (char *)Huffman_encode(huffmanEncoder, input, strlen(input));
+
+    HuffmanTree *tree = Huffman_getTree(huffmanEncoder);
+
+
+    Huffman *huffmanDecoder = Huffman_create(0);  // Create a Huffman object
+    Huffman_setTree(huffmanDecoder, tree);
+
     // Decode the encoded text
-    char *decodedText = Huffman_decode(huffman, encodedText, strlen(encodedText));
+    char *decodedText = Huffman_decode(huffmanDecoder, encodedText, strlen(encodedText));
 
     // Verify correctness by comparing the original text with the decoded text
     if (strcmp(input, decodedText) == 0) 
@@ -37,7 +42,7 @@ int main()
     }
 
     // Calculate the size of the Huffman tree in bits
-    size_t treeSize = Huffman_getTreeSize(huffman);
+    size_t treeSize = Huffman_getTreeSize(huffmanDecoder);
 
     // Calculate and print the compression rate
     size_t originalSize = strlen(input) * 8;  // Original size in bits
@@ -55,6 +60,7 @@ int main()
     // Cleanup
     free(encodedText);
     free(decodedText);
-    Huffman_destroy(huffman);
+    Huffman_destroy(huffmanEncoder);
+    Huffman_destroy(huffmanDecoder);
     return 0;
 }
