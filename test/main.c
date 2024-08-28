@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "Huffman/Huffman.h"
+#include "Huffman.h"
 
 #define MAX_CHAR 256
 
